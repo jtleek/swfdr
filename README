@@ -1,0 +1,71 @@
+########################################################################################
+# README for swfdr folder
+# Date: 7-1-12
+# Copyright (C) 2011 Jeffrey T. Leek (http://www.biostat.jhsph.edu/~jleek/contact.html) and Leah R. Jager
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details, see <http://www.gnu.org/licenses/>.
+#
+#
+#    Note: These functions were written on a Mac and may have difficulties when
+#          read on Windows machines. They depend on the functions in "journalAnalysisHelp.R" 
+#           all code is available from: https://github.com/jtleek/swfdr
+#          It also depends on the R libraries: stat4, genefilter, lme4
+#
+########################################################################################
+
+getPvalues.R
+-------------
+
+This file contains the code to scrape the P-values from pubmed (either run it first, or use the already
+calculated pvalueData.rda)
+
+
+
+calculateSwfdr.R
+-------------
+
+This file contains the function to estimate the science-wise false discovery rate
+
+
+journalAnalysis.R
+-------------
+
+This file contains the code to reproduce the quantities and figures in the Jager/Leek paper
+
+
+journalAnalysisHelp.R
+-------------
+
+This file contains a helper function necessary for journalAnalysis.R
+
+
+pvalueData.rda
+-------------
+
+The pre-computed p-value data used for the Jager/Leek paper in .rda format. 
+
+
+
+
+To reproduce the results in the Jager/Leek paper
+---------------------------------------
+
+Either: (1) Run getPvalues.R to obtain the p-value data, (2) Run journalAnalysis.R
+Or: (2) Run journalAnalysis.R using the pre-computed pvalueData.rda
+
+Note, because of the bootstrapping calculations, these functions may take a while (think order hours) to run. 
+
+
+
+
+
+
+
