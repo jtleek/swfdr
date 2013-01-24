@@ -53,6 +53,10 @@ pvalueData.rda
 The pre-computed p-value data used for the Jager/Leek paper in .rda format. 
 
 
+simulation.R
+------------
+
+A simulation study comparing our estimates to the truth when the assumptions hold and when they are badly violated. 
 
 
 To reproduce the results in the Jager/Leek paper
