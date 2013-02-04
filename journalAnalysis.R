@@ -178,6 +178,21 @@ glmm2 = glmer(pi0JournalYearVec ~ numSubVec + (1|journalInd),family="gaussian")
 p.values.lmer(glmm2)
 
 
+# Calculate the rate of increase in false positives by year and number of submissions, journal as a fixed effect
+
+journalInd = as.factor(rep(1:5,each=11))
+yearsVals = rep(2000:2010,5)
+numSubVec = as.vector(t(numSubmissions))
+pi0JournalYearVec = as.vector(t(pi0JournalYear))
+
+lm1 <- lm(pi0JournalYearVec ~as.factor(journalInd) + yearsVals)
+summary(lm1)
+
+lm2 <- lm(pi0JournalYearVec ~ as.factor(journalInd) + numSubVec)
+summary(lm2)
+
+
+
 
 # Make the figure showing the increasing number of submissions by journals
 
@@ -229,7 +244,7 @@ pdf("figure3.pdf",height=5*8,width=3*8)
 par(mfcol=c(5,3),mar=3*c(2,3,1,1))
 for(i in 1:3){
   for(j in 1:length(journals)){
-    hist(pvalueData[pvalueData[,4]== years3[i] & rownames(pvalueData)==journals[j] & pvalueData[,1] < 0.05,1],breaks=50,freq=F,xlab="",ylab="",xlim=c(0,0.05),main="",col=cols[j],ylim=c(0,600),density=25,border="black",cex.axis=2)
+    hist(pvalueData[pvalueData[,4]== years3[i] & rownames(pvalueData)==journals[j] & pvalueData[,1] < 0.05,1],breaks=50,freq=F,xlab="",ylab="",xlim=c(0,0.05),main="",col=cols[j],ylim=c(0,600),border="black",cex.axis=2)
     text(0.025,400,paste(journalAbb[j],years3[i]),cex=5)
     mtext("p-value",side=1,line=3,cex=2)
     mtext("Density",side=2,line=3,cex=2)
@@ -244,7 +259,7 @@ dev.off()
 pdf(file="figure4.pdf",height=8,width=8)
 cols = c("blue","red","orange","green","purple","darkgrey")
 cx = 3
-plot(1:10,1:10,type="n",xlim=c(2000,2010), ylim=c(0,1),xlab="",ylab="False Positive Rate",cex.lab=1.5,cex.axis=1.5,xaxt="n")
+plot(1:10,1:10,type="n",xlim=c(2000,2010), ylim=c(0,1),xlab="",ylab="False Discovery Rate",cex.lab=1.5,cex.axis=1.5,xaxt="n")
 for(i in 1:5){
   points(2000:2010,pi0JournalYear[i,],bg=cols[i],col="black",cex=cx,type="b",pch=22,lwd=2)
 
