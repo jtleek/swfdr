@@ -48,8 +48,9 @@ percent05 = pi0JournalYear = matrix(NA,nrow=5,ncol=11)
 pi0Journal = rep(NA,5)
 
 # Get the journals and years
-journals = unique(rownames(pvalueData))
-years = unique(pvalueData[,4])
+journals = c("Lancet", "JAMA","New England Journal of Medicine","BMJ","American Journal of Epidemiology")
+journalAbb =c("Lancet","JAMA","NEJM","BMJ","AJE")
+years <- 2000:2010
 
 # Get the percent of P-values less than 0.05 by journal/year
 
@@ -58,6 +59,7 @@ for(i in 1:length(journals)){
     percent05[i,j] = mean(as.numeric(pvalueData[pvalueData[,4]==years[j] & rownames(pvalueData) == journals[i],1]) < 0.05,na.rm=T)
   }
 }
+
 
 
 # Estimated the swfdr by journal/year
@@ -96,6 +98,9 @@ for(i in 1:length(journals)){
   cat(i)
 }
 
+journalAbb
+pi0Journal
+
 
 
 pi0JournalBoot = matrix(NA,nrow=5,ncol=100)
@@ -115,6 +120,8 @@ for(j in 1:100){
   }
 }
 
+apply(pi0JournalBoot,1,sd)
+
 save(pi0JournalBoot,file="pi0JournalBoot.rda")
 
 # Estimate the overall swfdr
@@ -128,6 +135,8 @@ save(pi0JournalBoot,file="pi0JournalBoot.rda")
   out = calculateSwfdr(pValues = pp, truncated = tt, rounded = rr, numEmIterations=100)
   pi0Overall = out$pi0
 
+
+pi0Overall
 
 # Get bootstrapped statistics for standard errors
 
@@ -144,7 +153,8 @@ for(i in 1:100){
   pi0OverallBoot[i] = out$pi0
   cat(i)
 }
-     
+
+sd(pi0OverallBoot)
 
 save(pi0OverallBoot,file="pi0OverallBoot.rda")
 
@@ -162,7 +172,21 @@ numSubmissions[1,] = c(NA,NA,NA,NA,NA,NA,5254,4770,4720,4609,4612)
 ###
 ### Section 2 - Perform Analysis 
 ###
-     
+
+# Get the number of unique Pubmed IDs
+
+length(unique(pvalueData[,3]))
+
+# Get the percent less than 0.05 by journal
+
+
+percent05Journal <- rep(NA,length(journals))
+for(i in 1:length(journals)){
+   percent05Journal[i] = mean(as.numeric(pvalueData[rownames(pvalueData) == journals[i],1]) < 0.05,na.rm=T)
+}
+
+journalAbb
+percent05Journal
 
 
 # Calculate the rate of increase in false positives by year and number of submissions
@@ -230,13 +254,14 @@ mad(table(pvalueData[,3]))
 
 set.seed(43888431)
 x = sample(unique(pvalueData[,3]),replace=F,size=10)
+x
 
 
 
 ### Make Figure 3
 
 cols = c("blue","red","orange","green","purple","darkgrey")
-journalAbb =c("Lancet","JAMA","NEJM","BMJ","AJE")
+
 
 years3 = c(2000,2005,2010)
 
@@ -244,8 +269,8 @@ pdf("figure3.pdf",height=5*8,width=3*8)
 par(mfcol=c(5,3),mar=3*c(2,3,1,1))
 for(i in 1:3){
   for(j in 1:length(journals)){
-    hist(pvalueData[pvalueData[,4]== years3[i] & rownames(pvalueData)==journals[j] & pvalueData[,1] < 0.05,1],breaks=50,freq=F,xlab="",ylab="",xlim=c(0,0.05),main="",col=cols[j],ylim=c(0,600),border="black",cex.axis=2)
-    text(0.025,400,paste(journalAbb[j],years3[i]),cex=5)
+    hist(pvalueData[pvalueData[,4]== years3[i] & rownames(pvalueData)==journals[j] & pvalueData[,1] < 0.05,1],breaks=50,freq=T,xlab="",ylab="",xlim=c(0,0.05),main="",col=cols[j],ylim=c(0,210),border="black",cex.axis=2)
+    text(0.025,180,paste(journalAbb[j],years3[i]),cex=5)
     mtext("p-value",side=1,line=3,cex=2)
     mtext("Density",side=2,line=3,cex=2)
   }
