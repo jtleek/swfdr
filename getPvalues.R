@@ -31,14 +31,14 @@ library(tm)
 
 getAbstractsPmids = function(journaltitle,year){
 # esearch
-url <- "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?"
+url <- "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?"
 q = paste("db=pubmed&term=",gsub(" ","+",journaltitle),"[ta]+AND+",year,"[dp]&usehistory=y",sep="")
 esearch <- xmlTreeParse(getURL(paste(url, q, sep="")), useInternal = T)
 webenv  <- xmlValue(getNodeSet(esearch, "//WebEnv")[[1]])
 key     <- xmlValue(getNodeSet(esearch, "//QueryKey")[[1]])
 
 # efetch
-url <- "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?"
+url <- "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?"
 q   <- "db=pubmed&retmode=xml&rettype=abstract"
 efetch <- xmlTreeParse(getURL(paste(url, q, "&WebEnv=", webenv, "&query_key=", key, sep="")), useInternal = T)
 r = xmlRoot(efetch)
